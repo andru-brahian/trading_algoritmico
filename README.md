@@ -1,4 +1,4 @@
-# trading_algoritmico
+# Preparación del modelo a usar para el algorítmo de trading. REGRESIONES
 
 Algoritmos de inversion y análisis de mercado automático en python
 realizar la regresión más apropiada para tu variable dependiente en función
