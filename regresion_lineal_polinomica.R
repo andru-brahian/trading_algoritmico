@@ -1,41 +1,3 @@
-#datos <- read.csv(url) cuando SI está delimitado por , y no por ;
-#datos <- read.csv(url, sep = ";")
-
-#base_datos = datos[,14:15]
-
-
-#lin_reg = lm(formula = "Open_AAPL(float)" ~ .,
-#            data = base_datos)
-
-
-# Ajuste del formato de la columna "Date(datetime)" a formato de fecha
-#base_datos$Fecha_tradeo <- as.Date(base_datos$Fecha_tradeo, format = "%m/%d/%Y")
-#base_datos$Date <- as.Date(base_datos$Date.datetime, format = "%m/%d/%Y")
-
-
-# Crear un nuevo conjunto de datos con una secuencia de valores para la columna "Volume_AAPL"
-#newdat <- data.frame(Volume_AAPL = seq(min(base_datos$Volume_AAPL),
-#                                       max(base_datos$Volume_AAPL), length.out = 100))
-
-# Ajustar regresión polinomial
-#poly_reg <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 2), data = base_datos)
-
-# Creación de un rango de valores de Volume_AAPL para la predicción
-#volume_range <- seq(min(base_datos$Volume_AAPL), max(base_datos$Volume_AAPL), length.out = 100)  # Ajusta la longitud del rango según tu necesidad
-
-# Predicciones del modelo polinómico
-#predictions <- predict(poly_reg, newdata = data.frame(Volume_AAPL = volume_range))
-
-# Creación del gráfico
-#ggplot(base_datos, aes(x = Volume_AAPL, y = Close_AAPL)) +
-# geom_point(color = "red") +
-#geom_line(aes(x = volume_range, y = predictions), color = "blue") +
-#ggtitle("Predicción polinómica del cierre de AAPL en función del volumen") +
-#xlab("Volumen AAPL") +
-#ylab("Close AAPL") +
-#theme_minimal()
-
-
 
 
 
@@ -123,34 +85,6 @@ ggplot(base_datos, aes(x = Volume_AAPL, y = Close_AAPL)) +
   ylab("Close_AAPL")
               
 
-
-
-
-
-
-rm(list = ls())
-head(base_datos)
-
-
-
-# Verifica si la columna 'Volume_AAPL_cuadrado' existe en 'base_datos'
-#if ("Volume_AAPL_cuadrado" %in% names(base_datos)) {
- # print("La columna 'Volume_AAPL_cuadrado' existe en 'base_datos'")
-#} else {
-#  print("La columna 'Volume_AAPL_cuadrado' no existe en 'base_datos'")
-#}
-# Obtén el tipo de datos de la columna 'Volume_AAPL_cuadrado'
-#tipo_de_datos <- class(base_datos$Volume_AAPL_cuadrado)
-#print(paste("El tipo de datos de 'Volume_AAPL_cuadrado' es:", tipo_de_datos))
-
-# Usando class()
-#class(base_datos$Volume_AAPL_cuadrado)
-
-# Usando typeof()
-#typeof(base_datos$Volume_AAPL_cuadrado)
-
-
-
 #REGRESIÓN POLINOMIAL, VARIAS VARIABLES
 #agregar columnas con nuevos datos:
 base_datos$Volume_AAPL_cuadrado = base_datos$Volume_AAPL^2
@@ -171,17 +105,7 @@ base_datos$Volume_AAPL_cuarta_potencia = base_datos$Volume_AAPL^4
 
 
 
-#SIN CREAR NUEVAS COLUMNAS
 
-# Ajustar regresión polinomial
-#poly_reg <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 3), data = base_datos)
-#poly_reg <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 4), data = base_datos)
-#poly_reg <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 5), data = base_datos)
-#poly_reg <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 6), data = base_datos)
-
-#poly(Volume_AAPL, degree = 7) especifica la variable independiente y su transformación. En este caso, Volume_AAPL se está transformando en una variable polinómica de septimo grado. Esto significa que, en lugar de usar Volume_AAPL directamente, se está utilizando Volume_AAPL elevado a la tercera potencia como variable independiente. Esta transformación permite modelar relaciones no lineales entre las variables.
-#SI AUMENTO MÁS EL GRADO A MAYORES DE 8, SE PRODUCE SOBRE AJUSTE, LO QUE HACE QUE LA PREDICCIÓN REACCIONE DE FORMA DEMASIADO SENSIBLE Y ARROJA VALORES EXORBITANTEMENTE IRREALES
-regresion_polinomica <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 8), data = base_datos)
 #regresion_polinomica = lm(Close_AAPL ~ poly(Volume_AAPL, 8), data = base_datos)
 # Calcular el número de valores únicos en la variable Volume_AAPL
 #num_valores_unicos <- length(unique(base_datos$Volume_AAPL))
@@ -197,6 +121,12 @@ regresion_polinomica <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 8), data = ba
 # Luego, el modelo de regresión lineal se ajusta a los datos de Close_AAPL en función de esta matriz de diseño polinómica. El resultado es una regresión polinómica de segundo grado que puede expresarse como:
 # Close_AAPL = a + b1 * Volume_AAPL + b2 * (Volume_AAPL^2)
 
+
+#poly(Volume_AAPL, degree = 7) especifica la variable independiente y su transformación. En este caso, Volume_AAPL se está transformando en una variable polinómica de septimo grado. Esto significa que, en lugar de usar Volume_AAPL directamente, se está utilizando Volume_AAPL elevado a la tercera potencia como variable independiente. Esta transformación permite modelar relaciones no lineales entre las variables.
+#SI AUMENTO MÁS EL GRADO A MAYORES DE 8, SE PRODUCE SOBRE AJUSTE, LO QUE HACE QUE LA PREDICCIÓN REACCIONE DE FORMA DEMASIADO SENSIBLE Y ARROJA VALORES EXORBITANTEMENTE IRREALES
+regresion_polinomica <- lm(Close_AAPL ~ poly(Volume_AAPL, degree = 8), data = base_datos)
+# Mostrar el resumen del modelo
+summary(regresion_polinomica)
 
 
 
@@ -224,25 +154,6 @@ regresion_polinomica <- ggplot(base_datos, aes(x = Volume_AAPL, y = Close_AAPL))
 
 
 regresion_polinomica
-
-
-#DESCARGAR IMÁGEN
-# Especifica la ruta completa donde deseas guardar el archivo .png
-#ruta_guardado <- "C:/Users/USUARIO/Documents/1 univalle/0 1 VIU/2_MODULO_2/6MBDI, ESTADISTICA AVANZADA/ACTIVIDAD 1/MINERIA_DE_DATOS/regresion_polinomica.png"
-
-# Utiliza ggsave para guardar el gráfico en la ubicación especificada
-#ggsave(filename = ruta_guardado, plot = regresion_polinomica, device = "png", bg= "white")
-
-
-
-
-plot(Close_AAPL ~ Volume_AAPL, data=base_datos)
-
-with(volume_range, points(x= base_datos$Volume_AAPL, y=predicciones, col='red'))
-
-
-points(x = base_datos$Volume_AAPL, y = predicciones, col = 'red')
-
 
 
 

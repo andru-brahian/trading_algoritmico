@@ -83,21 +83,47 @@ library(ggplot2)
 
 
 # Añadir un valor NA al final del vector de predicciones
-base_datos$Prediccion_Portafolio <- c(predict(modelo), NA)
+#base_datos$Prediccion_Portafolio <- c(predict(modelo), NA)
 
-print(base_datos$Prediccion_Portafolio)
+#print(base_datos$Prediccion_Portafolio)
 
 
 # Gráfico de rendimientos diarios y predicción
-ggplot(base_datos, aes(x = Rendimiento_AAPL, y = Rendimiento_Portafolio)) +
+AAPL_VS_PORTAFOLIO = ggplot(base_datos, aes(x = Rendimiento_AAPL, y = Rendimiento_Portafolio)) +
   geom_point(color = "purple") +
   geom_smooth(method = "lm", formula = y ~ x, color = "blue", se = FALSE) +
-  geom_smooth(aes(y = Prediccion_Portafolio), color = "red", linetype = "dashed") +
+  #geom_smooth(aes(y = Prediccion_Portafolio), color = "red", linetype = "dashed") +
   labs(title = "Rendimiento Portafolio vs. Rendimiento AAPL con Predicción",
        x = "Rendimiento AAPL",
        y = "Rendimiento Portafolio") +
   scale_color_manual(values = c("purple" = "purple", "blue" = "blue", "red" = "red")) +
   theme_minimal()
+AAPL_VS_PORTAFOLIO
+
+
+COIN_VS_PORTAFOLIO = ggplot(base_datos, aes(x = Rendimiento_COIN, y = Rendimiento_Portafolio)) +
+  geom_point(color = "purple") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "blue", se = FALSE) +
+  #geom_smooth(aes(y = Prediccion_Portafolio), color = "red", linetype = "dashed") +
+  labs(title = "Rendimiento Portafolio vs. Rendimiento COIN con Predicción",
+       x = "Rendimiento COIN",
+       y = "Rendimiento Portafolio") +
+  scale_color_manual(values = c("purple" = "purple", "blue" = "blue", "red" = "red")) +
+  theme_minimal()
+
+COIN_VS_PORTAFOLIO
+
+
+GEHC_VS_PORTAFOLIO = ggplot(base_datos, aes(x = Rendimiento_GEHC, y = Rendimiento_Portafolio)) +
+  geom_point(color = "purple") +
+  geom_smooth(method = "lm", formula = y ~ x, color = "blue", se = FALSE) +
+  #geom_smooth(aes(y = Prediccion_Portafolio), color = "red", linetype = "dashed") +
+  labs(title = "Rendimiento Portafolio vs. Rendimiento GEHC con Predicción",
+       x = "Rendimiento GEHC",
+       y = "Rendimiento Portafolio") +
+  scale_color_manual(values = c("purple" = "purple", "blue" = "blue", "red" = "red")) +
+  theme_minimal()
+GEHC_VS_PORTAFOLIO
 
 
 
@@ -105,400 +131,19 @@ ggplot(base_datos, aes(x = Rendimiento_AAPL, y = Rendimiento_Portafolio)) +
 matriz_correlacion_multidimensional <- pairs(base_datos[c("Rendimiento_AAPL", "Rendimiento_COIN", "Rendimiento_GEHC", "Rendimiento_Portafolio")])
 matriz_correlacion_multidimensional
 
-#DESCARGAR IMÁGEN
-# Especifica la ruta completa donde deseas guardar el archivo .png
-#ruta_guardado <- "C:/Users/USUARIO/Documents/1 univalle/0 1 VIU/2_MODULO_2/6MBDI, ESTADISTICA AVANZADA/ACTIVIDAD 1/MINERIA_DE_DATOS/matriz_correlacion_multidimensional.png"
 
-# Utiliza ggsave para guardar el gráfico en la ubicación especificada
-#ggsave(filename = ruta_guardado, plot = matriz_correlacion_multidimensional, device = "png", bg = "white")
-#matriz_correlacion_multidimensional
 
+base_datos <- na.omit(base_datos)
 
-# Crear una matriz de gráficos de dispersión
-#plot(base_datos[c("Rendimiento_AAPL", "Rendimiento_COIN", "Rendimiento_GEHC", "Rendimiento_Portafolio")])
+# Cargar las bibliotecas necesarias
+library(corrplot)
 
-# Agregar una línea de predicción a cada gráfico de dispersión
-#for (i in 1:3) {
-#  lines(x = base_datos[, i], y = base_datos$Prediccion_Portafolio, col = "red")
-#}
+# Crear una matriz de gráficos de dispersión con valores
+pairs(base_datos[c("Rendimiento_AAPL", "Rendimiento_COIN", "Rendimiento_GEHC", "Rendimiento_Portafolio")])
 
+# Calcular la matriz de correlación
+correlation_matrix <- cor(base_datos[c("Rendimiento_AAPL", "Rendimiento_COIN", "Rendimiento_GEHC", "Rendimiento_Portafolio")])
 
-
-
-
-
-# INTENTOS 3D
-
-# Instalar y cargar la biblioteca rgl
-#install.packages("rgl")
-library(rgl)
-install.packages("plotly")
-# Cargar el paquete plotly
-library(plotly)
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_AAPL <- rnorm(100)
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Ajustar un modelo de regresión múltiple
-modelo <- lm(Rendimiento_Portafolio ~ Rendimiento_AAPL + Rendimiento_COIN)
-
-# Crear un data frame con los datos
-data <- data.frame(
-  Rendimiento_AAPL = Rendimiento_AAPL,
-  Rendimiento_COIN = Rendimiento_COIN,
-  Rendimiento_Portafolio = Rendimiento_Portafolio
-)
-
-# Crear el gráfico de dispersión 3D
-fig <- plot_ly(data, x = ~Rendimiento_AAPL, y = ~Rendimiento_COIN, z = ~Rendimiento_Portafolio, 
-               type = "scatter3d", mode = "markers", marker = list(size = 5, color = ~Rendimiento_Portafolio))
-
-# Obtener los coeficientes del modelo de regresión
-coeficientes <- coef(modelo)
-
-# Crear una línea de regresión utilizando los coeficientes
-x <- seq(min(data$Rendimiento_AAPL), max(data$Rendimiento_AAPL), length.out = 100)
-y <- seq(min(data$Rendimiento_COIN), max(data$Rendimiento_COIN), length.out = 100)
-superficie <- outer(x, y, function(x, y) coeficientes[1] + coeficientes[2] * x + coeficientes[3] * y)
-
-# Agregar la línea de regresión al gráfico
-fig <- fig %>% add_surface(z = ~superficie, colorscale = "Viridis")
-
-# Mostrar el gráfico
-fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_AAPL <- rnorm(100)
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_GEHC <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Ajustar un modelo de regresión múltiple
-modelo <- lm(Rendimiento_Portafolio ~ Rendimiento_AAPL + Rendimiento_COIN + Rendimiento_GEHC)
-
-# Crear un data frame con los datos
-data <- data.frame(
-  Rendimiento_AAPL = Rendimiento_AAPL,
-  Rendimiento_COIN = Rendimiento_COIN,
-  Rendimiento_GEHC = Rendimiento_GEHC,
-  Rendimiento_Portafolio = Rendimiento_Portafolio
-)
-
-# Crear el gráfico de dispersión 3D
-fig <- plot_ly(data, x = ~Rendimiento_AAPL, y = ~Rendimiento_COIN, z = ~Rendimiento_GEHC, 
-               type = "scatter3d", mode = "markers", marker = list(size = 5, color = ~Rendimiento_Portafolio))
-
-# Obtener los coeficientes del modelo de regresión
-coeficientes <- coef(modelo)
-
-# Crear un plano de regresión utilizando los coeficientes
-x <- seq(min(data$Rendimiento_AAPL), max(data$Rendimiento_AAPL), length.out = 100)
-y <- seq(min(data$Rendimiento_COIN), max(data$Rendimiento_COIN), length.out = 100)
-superficie <- outer(x, y, function(x, y) coeficientes[1] + coeficientes[2] * x + coeficientes[3] * y)
-
-# Agregar el plano de regresión al gráfico
-fig <- fig %>% add_surface(z = ~superficie, colorscale = "Viridis")
-
-# Mostrar el gráfico
-fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_AAPL <- rnorm(100)
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_GEHC <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Ajustar un modelo de regresión múltiple
-modelo <- lm(Rendimiento_Portafolio ~ Rendimiento_AAPL + Rendimiento_COIN + Rendimiento_GEHC)
-
-# Crear un data frame con los datos
-data <- data.frame(
-  Rendimiento_AAPL = Rendimiento_AAPL,
-  Rendimiento_COIN = Rendimiento_COIN,
-  Rendimiento_GEHC = Rendimiento_GEHC,
-  Rendimiento_Portafolio = Rendimiento_Portafolio
-)
-
-# Crear el gráfico de dispersión 3D
-fig <- plot_ly(data, x = ~Rendimiento_AAPL, y = ~Rendimiento_COIN, z = ~Rendimiento_GEHC, 
-               type = "scatter3d", mode = "markers", marker = list(size = 5, color = ~Rendimiento_Portafolio))
-
-# Mostrar el gráfico
-fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_AAPL <- rnorm(100)
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_GEHC <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Ajustar un modelo de regresión múltiple
-modelo <- lm(Rendimiento_Portafolio ~ Rendimiento_AAPL + Rendimiento_COIN + Rendimiento_GEHC)
-
-# Crear un data frame con los datos
-data <- data.frame(
-  Rendimiento_AAPL = Rendimiento_AAPL,
-  Rendimiento_COIN = Rendimiento_COIN,
-  Rendimiento_GEHC = Rendimiento_GEHC
-)
-
-# Agregar la predicción del modelo al data frame
-data$Prediccion_Portafolio <- predict(modelo)
-
-# Crear el gráfico de dispersión 3D
-fig <- plot_ly(data, x = ~Rendimiento_AAPL, y = ~Rendimiento_COIN, z = ~Rendimiento_GEHC, 
-               type = "scatter3d", mode = "markers", marker = list(size = 5))
-
-# Agregar la línea de regresión al gráfico
-fig <- fig %>% add_trace(
-  x = ~Rendimiento_AAPL,
-  y = ~Rendimiento_COIN,
-  z = ~Prediccion_Portafolio,
-  type = "scatter3d",
-  mode = "lines",
-  line = list(color = "red", width = 2)
-)
-
-# Mostrar el gráfico
-fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_AAPL <- rnorm(100)
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_GEHC <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Ajustar un modelo de regresión múltiple
-modelo <- lm(Rendimiento_Portafolio ~ Rendimiento_AAPL + Rendimiento_COIN + Rendimiento_GEHC)
-
-# Crear un gráfico de dispersión 3D
-scatterplot3d(
-  Rendimiento_AAPL, Rendimiento_COIN, Rendimiento_GEHC,
-  color = "blue", pch = 16,
-  main = "Gráfico 3D con Línea de Regresión"
-)
-
-# Agregar la línea de regresión al gráfico
-s3d.abline(modelo, col = "red")
-
-# Puedes rotar y explorar el gráfico 3D en la ventana gráfica interactiva que se abrirá
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Crear un conjunto de datos de ejemplo con tus variables
-Rendimiento_COIN <- rnorm(100)
-Rendimiento_GEHC <- rnorm(100)
-Rendimiento_Portafolio <- rnorm(100)
-
-# Crear un gráfico de dispersión 3D
-plot3d(Rendimiento_COIN, Rendimiento_GEHC, Rendimiento_Portafolio, col = "blue", size = 2)
-
-# Agregar anotaciones de texto para las variables
-text3d(Rendimiento_COIN, Rendimiento_GEHC, Rendimiento_Portafolio, 
-       labels = c("Rendimiento_COIN", "Rendimiento_GEHC", "Rendimiento_Portafolio"), 
-       col = "red", adj = c(-0.5, -0.5))
-
-# Puedes rotar y explorar el gráfico 3D en l
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Gráfica de los rendimientos diarios
-ggplot(base_datos, aes(x = new_date)) +
-  geom_line(aes(y = Rendimiento_AAPL, color = "AAPL"), size = 1) +
-  geom_line(aes(y = Rendimiento_COIN, color = "COIN"), size = 1) +
-  geom_line(aes(y = Rendimiento_GEHC, color = "GEHC"), size = 1) +
-  geom_line(aes(y = Rendimiento_Portafolio, color = "Portafolio"), size = 1) +
-  labs(title = "Rendimientos Diarios de Acciones y Portafolio",
-       x = "Fecha",
-       y = "Rendimiento") +
-  scale_color_manual(values = c("AAPL" = "blue", "COIN" = "red", "GEHC" = "green", "Portafolio" = "purple")) +
-  theme_minimal()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Gráfica de los rendimientos diarios en líneas y puntos
-ggplot(base_datos, aes(x = new_date)) +
-  geom_line(aes(y = Rendimiento_AAPL, color = "AAPL"), size = 1) +
-  geom_line(aes(y = Rendimiento_COIN, color = "COIN"), size = 1) +
-  geom_line(aes(y = Rendimiento_GEHC, color = "GEHC"), size = 1) +
-  geom_line(aes(y = Rendimiento_Portafolio, color = "Portafolio"), size = 1) +
-  geom_point(aes(y = Rendimiento_AAPL, color = "AAPL"), size = 2) +
-  geom_point(aes(y = Rendimiento_COIN, color = "COIN"), size = 2) +
-  geom_point(aes(y = Rendimiento_GEHC, color = "GEHC"), size = 2) +
-  geom_point(aes(y = Rendimiento_Portafolio, color = "Portafolio"), size = 2) +
-  labs(title = "Rendimientos Diarios de Acciones y Portafolio",
-       x = "Fecha",
-       y = "Rendimiento") +
-  scale_color_manual(values = c("AAPL" = "blue", "COIN" = "red", "GEHC" = "green", "Portafolio" = "purple")) +
-  theme_minimal()
-
-
-
-
-# Gráfica de los rendimientos diarios en líneas y puntos
-ggplot(base_datos, aes(x = new_date)) +
-  geom_line(aes(y = Rendimiento_AAPL, color = "AAPL"), size = 1) +
-  geom_line(aes(y = Rendimiento_COIN, color = "COIN"), size = 1) +
-  geom_line(aes(y = Rendimiento_GEHC, color = "GEHC"), size = 1) +
-  geom_line(aes(y = Rendimiento_Portafolio, color = "Portafolio"), size = 1) +
-  geom_point(aes(y = Rendimiento_AAPL, color = "AAPL"), size = 2) +
-  geom_point(aes(y = Rendimiento_COIN, color = "COIN"), size = 2) +
-  geom_point(aes(y = Rendimiento_GEHC, color = "GEHC"), size = 2) +
-  geom_point(aes(y = Rendimiento_Portafolio, color = "Portafolio"), size = 2) +
-  labs(title = "Rendimientos Diarios de Acciones y Portafolio",
-       x = "Fecha",
-       y = "Rendimiento") +
-  scale_color_manual(values = c("AAPL" = "blue", "COIN" = "red", "GEHC" = "green", "Portafolio" = "purple")) +
-  theme_minimal()
-
-
-
-
-# Gráfico de rendimientos diarios y predicción
-ggplot(base_datos, aes(x = Rendimiento_AAPL, y = Rendimiento_Portafolio)) +
-  geom_point(color = "purple") +
-  geom_smooth(method = "lm", formula = y ~ x, color = "blue", se = FALSE) +
-  geom_smooth(aes(y = Prediccion_Portafolio), color = "red", linetype = "dashed") +
-  labs(title = "Rendimiento Portafolio vs. Rendimiento AAPL con Predicción",
-       x = "Rendimiento AAPL",
-       y = "Rendimiento Portafolio") +
-  scale_color_manual(values = c("purple" = "purple", "blue" = "blue", "red" = "red")) +
-  theme_minimal()
-
+# Mostrar la matriz de multicolinealidad
+corrplot.mixed(correlation_matrix, order = 'AOE')
 
