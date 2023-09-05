@@ -93,6 +93,9 @@ head(example_data)
 regresion_logistica <- glm(Up ~ Close_AAPL, data = base_datos2, family = binomial)
 summary(regresion_logistica)
 
+regresion_logistica <- glm(Up ~ Close_AAPL, data = base_datos2, family = binomial, control = glm.control(maxit = 100))
+summary(regresion_logistica)
+
 summary(base_datos2$Close_AAPL)  # Muestra estadísticas descriptivas para Close_AAPL
 head(base_datos2$Up)
 summary(base_datos2$Up)
@@ -111,6 +114,10 @@ prediccion_logistica
 # CATEGORIZAR VALORES MAYORES A 0,5 COMO SUBIO EL PRECIO DE Close_AAPL , 1, Y DE LO CONTRARIO 0, baja
 prediccion_logistica= ifelse(prediccion_logistica>0.5, yes= 1, no = 0)
 prediccion_logistica
+
+
+# Cargar la biblioteca dplyr
+library(dplyr)
 
 #comparar la realidad con las predicciones 
 #mutate para añadir la columna de las predicciones
